@@ -1,6 +1,6 @@
 from flask import Flask, request
 app = Flask(__name__)
-from printing import print_all
+# from printing import print_all
 
 @app.route("/", methods=['POST'])
 def print():
@@ -10,8 +10,9 @@ def print():
     # user_name = ...
     # server = ...
     # printer_name = ...
-    print_all(user_name, server, printer_name)
-    return "OK"
+    # print_all(user_name, server, printer_name)
+    # return "OK"
+    pass
 
 if __name__ == '__main__':
 main()
