@@ -1,18 +1,16 @@
 from flask import Flask, request
 app = Flask(__name__)
-# from printing import print_all
 
+# gets the data from nfc reader and the database, sends it to the printing service
 @app.route("/", methods=['POST'])
-def print():
-    card_id = request.values.get("card_id")
-    readed_id = request.values.get("reader_id")
+def index():
+    card_id = request.get_json()['card_id']
+    reader_id = request.get_json()['reader_id']
     # find user and printer in the database:
     # user_name = ...
-    # server = ...
     # printer_name = ...
-    # print_all(user_name, server, printer_name)
-    # return "OK"
-    pass
+    # print the document
+    return "OK"
 
 if __name__ == '__main__':
-main()
+    app.run(host= '0.0.0.0')
