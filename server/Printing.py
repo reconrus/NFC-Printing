@@ -1,4 +1,4 @@
-import win32print, win32ui, win32gui
+import win32print, win32ui, win32gui, win32api
 import win32con, pywintypes
 
 
@@ -91,15 +91,14 @@ def StartPrint (printer='MyPSPrinter',
                        win32con.DM_TTOPTION |
                        win32con.DM_SCALE)
 
-    h_dc = win32gui.CreateDC('WINSPOOL', printer, devmode)
-    dc = win32ui.CreateDCFromHandle(h_dc)
-    try:
-        dc.StartDoc('Postscript File Print', filename)
-        try:
-            dc.StartPage()
-            dc.EndPage()
-        finally:
-            dc.EndDoc()
-    finally:
-        win32print.ClosePrinter(h_printer)
-StartPrint('Microsoft XPS Document Writer', 'D:\Text.pdf' )
+    win32api.ShellExecute(
+        0,
+        "print",
+        filename,
+        '"%s"' % win32print.GetPrinter(h_printer, 2),
+        ".",
+        0
+    )
+
+
+StartPrint('Samsung M337x 387x 407x Series', 'D:\Text.docx' )
