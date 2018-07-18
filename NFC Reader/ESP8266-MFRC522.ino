@@ -103,10 +103,10 @@ void loop() {
   
 
   HTTPClient http;
+  
+  http.begin("http://10.240.17.184:5000");
 
-  http.begin("http://ptsv2.com/t/fyedh-1531311988/post");
-
-  http.addHeader("Content-Type", "text/plain"); 
+  http.addHeader("Content-Type", "application/json"); 
 
 
 
