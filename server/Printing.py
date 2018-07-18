@@ -72,8 +72,10 @@ def StartPrint (printer='MyPSPrinter',
     else:
         text_data = text
     job_info = ("Raw File Print", filename, 'RAW')
-    h_printer = win32print.OpenPrinter(printer)
-    devmode = win32print.GetPrinter(h_printer, 2)['pDevMode']
+    PRINTER_DEFAULTS = {"DesiredAccess": win32print.PRINTER_ALL_ACCESS}
+    h_printer = win32print.OpenPrinter(printer, PRINTER_DEFAULTS)
+    properties = win32print.GetPrinter(h_printer, 2)
+    devmode = properties["pDevMode"]
     devmode.FormName = 'Letter'  # or 'A4'
     devmode.PaperSize = paperSize
     devmode.Orientation = orientation
@@ -90,15 +92,17 @@ def StartPrint (printer='MyPSPrinter',
                        win32con.DM_COLOR |
                        win32con.DM_TTOPTION |
                        win32con.DM_SCALE)
+    properties['pDevMode'] =devmode
+    win32print.SetPrinter(h_printer, 2, properties, 0)
 
-    win32api.ShellExecute(
-        0,
-        "print",
-        filename,
-        '"%s"' % win32print.GetPrinter(h_printer, 2),
-        ".",
-        0
-    )
+    print(win32api.ShellExecute(
+       0,
+       "print",
+       filename,
+       '"%s"' % win32print.GetPrinter(h_printer, 2),
+       ".",
+       0
+    ))
 
 
-StartPrint('Samsung M337x 387x 407x Series', 'D:\Text.docx' )
+StartPrint('Samsung M337x 387x 407x Series', 'D:\Text.xlsx', 1 )
