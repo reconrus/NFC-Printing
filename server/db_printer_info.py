@@ -25,10 +25,10 @@ def getPrinterInfo(idChip):
     #idChip = 1
 
     #SQL запрос, который будет исполняться
-    sql = 'SELECT macPrinter, ipPrinter FROM printers WHERE idChip='+str(idChip)
+    sql = 'SELECT macPrinter, ipPrinter FROM printers WHERE idChip=?'
 
     #Исполняем
-    cursor.execute(sql)
+    cursor.execute(sql, idChip)
     results = cursor.fetchall()
 
     #Достаём mac и ip принтера, который нам нужен
@@ -37,5 +37,17 @@ def getPrinterInfo(idChip):
 
     return macPrinter, ipPrinter
 
+# used for saving docs in the right folder
+def getCardId(email, password):
 
+    cursor = connection()
+
+    sql = 'SELECT [Card ID] FROM data WHERE email = ? AND passw = ?'
+
+    cursor.execute(sql, email, password)
+    results = cursor.fetchall()
+
+    card_id = results[0][0]
+
+    return card_id
 

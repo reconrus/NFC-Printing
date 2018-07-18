@@ -1,4 +1,5 @@
 from flask import Flask, request
+from db_printer_info import getPrinterInfo
 app = Flask(__name__)
 
 # gets the data from nfc reader and the database, sends it to the printing service
@@ -6,10 +7,8 @@ app = Flask(__name__)
 def index():
     card_id = request.get_json()['card_id']
     reader_id = request.get_json()['reader_id']
-    # find user and printer in the database:
-    # user_name = ...
-    # printer_name = ...
-    # print the document
+    # find printer in the database:
+    macPrinter = getPrinterInfo[0]
     return "OK"
 
 if __name__ == '__main__':
