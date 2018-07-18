@@ -1,5 +1,6 @@
 import win32print, win32ui, win32gui, win32api
 import win32con, pywintypes
+import os
 
 
 def install_printer (printer_name='MyPSPrinter'):
@@ -57,7 +58,7 @@ def uninstall_printer (printer_name='MyPSPrinter'):
     return del_printer
 
 def StartPrint (printer='MyPSPrinter',
-             filename=r'D:\test.txt',
+             path=r'D:\test.txt',
              copies = 1,
             orientation = win32con.DMORIENT_PORTRAIT,
             duplex = win32con.DMDUP_HORIZONTAL,
@@ -65,13 +66,6 @@ def StartPrint (printer='MyPSPrinter',
             color = win32con.DMCOLOR_MONOCHROME,
             paperSize = win32con.DMPAPER_LETTER,  # or DMPAPER_A4
              text=None):
-    if text is None:
-        f = open(filename, "rb")
-        buffer_size = 100000
-        text_data = f.read(buffer_size)
-    else:
-        text_data = text
-    job_info = ("Raw File Print", filename, 'RAW')
     PRINTER_DEFAULTS = {"DesiredAccess": win32print.PRINTER_ALL_ACCESS}
     h_printer = win32print.OpenPrinter(printer, PRINTER_DEFAULTS)
     properties = win32print.GetPrinter(h_printer, 2)
@@ -94,15 +88,19 @@ def StartPrint (printer='MyPSPrinter',
                        win32con.DM_SCALE)
     properties['pDevMode'] =devmode
     win32print.SetPrinter(h_printer, 2, properties, 0)
+    listOfFiles = os.listdir(path)
 
-    print(win32api.ShellExecute(
-       0,
-       "print",
-       filename,
-       '"%s"' % win32print.GetPrinter(h_printer, 2),
-       ".",
-       0
-    ))
+    for file in listOfFiles:
+        filename = path+'\\'+file
+        print(filename)
+        print(win32api.ShellExecute(
+           0,
+           "print",
+           filename,
+           '"%s"' % win32print.GetPrinter(h_printer, 2),
+           ".",
+           0
+        ))
 
 
-StartPrint('Samsung M337x 387x 407x Series', 'D:\Text.xlsx', 1 )
+StartPrint('Samsung M337x 387x 407x Series', 'D:\Text' )
