@@ -42,7 +42,7 @@ def getCardId(email, password):
 
     cursor = connection()
 
-    sql = 'SELECT [Card ID] FROM data WHERE email = ? AND passw = ?'
+    sql = 'SELECT [Card ID] FROM data WHERE email = ? AND password = ?'
 
     cursor.execute(sql, email, password)
     results = cursor.fetchall()
