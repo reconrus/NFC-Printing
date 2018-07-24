@@ -104,7 +104,7 @@ void loop() {
 
   HTTPClient http;
   
-  http.begin("http://10.240.17.184:5000");
+  http.begin("http://10.90.137.97:5000/print/");
 
   http.addHeader("Content-Type", "application/json"); 
 
