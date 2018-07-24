@@ -35,6 +35,7 @@ class UserRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
         else:
             # error response
+            pass
 
         
 
