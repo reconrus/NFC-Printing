@@ -1,4 +1,4 @@
-from http.server import BaseHTTPRequestHandler
+from http.server import HTTPServer, BaseHTTPRequestHandler
 # import os
 from flask import Flask, request
 from db_printer_info import getPrinterInfo, getCardId
@@ -8,7 +8,7 @@ app = Flask(__name__)
 HOST_NAME = '0.0.0.0'
 PORT_NUMBER = 4600
 
-class UserRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+class UserRequestHandler(BaseHTTPRequestHandler):
     def do_POST(s):
         '''
         This method handles post requests to the server from clients and sends back responsess:
@@ -59,8 +59,7 @@ if __name__ == '__main__':
     '''
     app.run(host= '0.0.0.0')
     
-    # server_class = BaseHTTPServer.HTTPServer
-    # httpd = server_class((HOST_NAME, PORT_NUMBER), UserRequestHandler)
+    # httpd = HTTPServer((HOST_NAME, PORT_NUMBER), UserRequestHandler)
     # print "Server Starts" % (HOST_NAME, PORT_NUMBER)
     # try:
     #     httpd.serve_forever()
