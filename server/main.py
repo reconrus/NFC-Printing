@@ -29,6 +29,10 @@ class UserRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             # if not os.path.exists(pathname):
             #     os.makedirs(pathname)
             # here we need to get the document and its print settings and save it all to two files
+
+            # for research purposes:
+            print(s.rfile())
+
         else:
             # error response
 
