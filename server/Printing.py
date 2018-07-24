@@ -101,6 +101,3 @@ def StartPrint (printer='MyPSPrinter',
            ".",
            0
         ))
-
-
-StartPrint('Samsung M337x 387x 407x Series', 'D:\Text' )
