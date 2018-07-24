@@ -1,4 +1,4 @@
-from http.server import BaseHTTPServer
+from http.server import BaseHTTPRequestHandler
 # import os
 from flask import Flask, request
 from db_printer_info import getPrinterInfo, getCardId
