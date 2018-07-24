@@ -49,6 +49,12 @@ def nfc_reader_request_handling():
     card_id = request.get_json()['card_id']
     reader_id = request.get_json()['reader_id']
     macPrinter = getPrinterInfo(reader_id)[0]
+
+    # for testing purposes:
+    print(card_id)
+    print(reader_id)
+    print(macPrinter)
+
     StartPrint(printer=macPrinter, path=r'C:\\docs_for_print\\' + card_id)
     # should delete files after the printing is complete
     return "OK"
