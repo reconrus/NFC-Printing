@@ -14,10 +14,10 @@ var sql = require('mssql');
 var userId = -1;
 
 var config = {
-    server: '192.168.1.32',
+    server: 'localhost',
     database: 'test_skip_card',
-    user: 'sa',
-    password: 'root',
+    user: 'user',
+    password: 'kQzYxVJMt8l5O8P51r0YdHHc',
     port: 1433
 };
 
