@@ -16,6 +16,7 @@ Ipp server that showed as ipp printer.
    2. Write:
      node main.js
    3. Server will starts at http://localhost:3000
+   4. Login: name_en Password: surname_en (from dbo.data)
    4. Add new printer into your machine by hands as "Microsoft IPP Class Driver"
    5. Use it as default printer
    6. All documnents that you sent stores into this folder.
