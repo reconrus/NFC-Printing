@@ -1,54 +1,22 @@
 {
-  "name": "ipp-printer",
-  "version": "1.0.0",
-  "description": "Create a printer on the network",
-  "main": "index.js",
-  "bin": "./bin.js",
+  "name": "virtual-ipp-printer",
+  "version": "0.0.2",
+  "description": "Virtual ipp-printer for NFC-Printing project",
+  "main": "main.js",
   "dependencies": {
-    "bonjour": "^3.0.0",
-    "debug": "^2.2.0",
-    "express": "^4.16.3",
-    "ipp-encoder": "^4.0.2",
+    "http-auth": "^3.2.3",
     "ipp-printer": "^1.0.0",
-    "non-private-ip": "^1.3.0",
-    "once": "^1.3.3",
-    "passport": "^0.4.0",
-    "passport-http": "^0.3.0",
-    "pump": "^1.0.1",
-    "rc": "^1.1.6",
-    "readable-stream": "^2.0.5",
-    "unique-concat": "^0.2.2"
+    "mssql": "^3.3.0"
   },
-  "devDependencies": {
-    "standard": "^5.4.1",
-    "tape": "^4.2.2"
-  },
+  "devDependencies": {},
   "scripts": {
-    "test": "standard"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/watson/ipp-printer.git"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "ipp",
-    "printer",
-    "print",
-    "server",
-    "network",
-    "bonjour",
-    "zeroconf",
-    "mdns",
-    "multicast"
+    "printing",
+    "ipp-auth"
   ],
-  "author": "Thomas Watson Steen <w@tson.dk> (https://twitter.com/wa7son)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/watson/ipp-printer/issues"
-  },
-  "homepage": "https://github.com/watson/ipp-printer",
-  "coordinates": [
-    55.6665721,
-    12.5800915
-  ]
+  "author": "Yaroslav Yudinskikh",
+  "license": "ISC"
 }
