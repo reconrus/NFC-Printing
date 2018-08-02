@@ -8,7 +8,7 @@ Ipp server that showed as ipp printer.
   2. Open Command line in this folder (cmd) or Powershell
   3. Write: 
     npm install
-  4. Copy files 'bind.js', 'printer.js' from "/mod" folder to the "node_modules/ipp-printer/lib" by replace.
+  4. Copy files 'bind.js', 'printer.js' from "/mod" folder to the "/node_modules/ipp-printer/lib" by replace.
   
  <H2> USAGE
   
