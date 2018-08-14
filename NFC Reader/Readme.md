@@ -9,3 +9,10 @@
 | GND    | GND    | G  |
 | RST    | GPIO5  | D1 |
 | 3.3V   | 3.3V	  | 3V |
+
+
+## Constants
+ 
+chipID - ID of the chip attached to the printer (Strictly 4 characters *for now*) <br>
+ssid - SSID of the Wi-Fi Network <br>
+pass - Password of the Wi-Fi Network <br> 
