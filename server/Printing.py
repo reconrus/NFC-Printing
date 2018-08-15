@@ -1,6 +1,6 @@
 import win32print, win32ui, win32gui, win32api
 import win32con, pywintypes
-import os
+import os, time
 
 
 def install_printer (printer_name='MyPSPrinter'):
@@ -102,4 +102,5 @@ def StartPrint (printer='MyPSPrinter',
            0
         ))
         # needs testing:
+        time.sleep(1800)
         os.remove(filename)
