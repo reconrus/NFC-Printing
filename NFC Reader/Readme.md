@@ -16,3 +16,4 @@
 chipID - ID of the chip attached to the printer (Strictly 4 characters *for now*) <br>
 ssid - SSID of the Wi-Fi Network <br>
 pass - Password of the Wi-Fi Network <br> 
+serverAddress - IP address + port of the server 
