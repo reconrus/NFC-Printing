@@ -1,36 +1,18 @@
 #include <ESP8266WiFi.h>
-
 #include <ESP8266HTTPClient.h>
-
 #include <SPI.h>
-
 #include "MFRC522.h"
-
-
-
-#define RST_PIN  5  // RST-PIN für RC522 - RFID - SPI - Modul GPIO5 
-
-#define SS_PIN  4  // SDA-PIN für RC522 - RFID - SPI - Modul GPIO4 
-
+#define RST_PIN  5  // RST-PIN für RC522 - RFID - SPI - Modul GPIO5
+#define SS_PIN  4  // SDA-PIN für RC522 - RFID - SPI - Modul GPIO4
 #define CARD_ID_LENGTH 8 //Lenght of card id in hexadecimal representation
+#define LED_PIN 2
 
-
-
-const char* chipID = "0000";
-
-
-
-const char *ssid =  "Innopolis";     
-
+const char* chipID = "1000";
+const char *ssid =  "Innopolis";
 const char *pass =  "Innopolis";
-
-
-
-
+const char *serverAddress = "http://10.90.137.97:5000/print/";
 
 MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance
-
-
 
 void setup() {
 
@@ -38,131 +20,68 @@ void setup() {
 
   delay(250);
 
-  Serial.println(F("Booting...."));
+  pinMode(LED_PIN, OUTPUT);
 
-  
+  Serial.println(F("Booting...."));
 
   SPI.begin();           // Init SPI bus
 
   mfrc522.PCD_Init();    // Init MFRC522
 
-  
-
   WiFi.begin(ssid, pass);
 
-  
-
   while (WiFi.status() != WL_CONNECTED) {
-
     delay(500);
-
     Serial.print(".");
-
   }
 
   if (WiFi.status() == WL_CONNECTED) {
-
     Serial.println(F("WiFi connected"));
-
   }
 
-  
-
   Serial.println(F("Ready!"));
-
-  Serial.println(F("======================================================")); 
-
+  Serial.println(F("======================================================"));
   Serial.println(F("Scan for Card and print UID:"));
-
+  blink_n_times(3, 100);
 }
 
 
 
-void loop() { 
-
+void loop() {
   // Look for new cards
-
   if ( ! mfrc522.PICC_IsNewCardPresent()) {
-
     delay(50);
-
     return;
-
   }
 
   // Select one of the cards
-
   if ( ! mfrc522.PICC_ReadCardSerial()) {
-
     delay(50);
-
     return;
-
   }
 
-  
-
   HTTPClient http;
-  
-  http.begin("http://10.90.137.97:5000/print/");
-
-  http.addHeader("Content-Type", "application/json"); 
-
-
+  http.begin(serverAddress);
+  http.addHeader("Content-Type", "application/json");
 
   char* str = prepare_POST_str( mfrc522.uid.uidByte, mfrc522.uid.size, chipID);
 
   int httpCode = http.POST(str);
-
-  free(str);   
-
-  
-
-  switch(httpCode){
-
-    case HTTPC_ERROR_CONNECTION_REFUSED: break;
-
-    case HTTPC_ERROR_SEND_HEADER_FAILED: break;
-
-    case HTTPC_ERROR_SEND_PAYLOAD_FAILED: break;
-
-    case HTTPC_ERROR_NOT_CONNECTED: break;
-
-    case HTTPC_ERROR_NO_STREAM: break;
-
-    case HTTPC_ERROR_NO_HTTP_SERVER: break;
-
-    case HTTPC_ERROR_TOO_LESS_RAM: break;
-
-    case HTTPC_ERROR_ENCODING: break;
-
-    case HTTPC_ERROR_STREAM_WRITE: break;
-
-    case HTTPC_ERROR_READ_TIMEOUT: break;
-
-    default: break;
-  }
-
-    
-
-  
-
-  http.end();
+  blink_on_answer(httpCode);
 
   // Show some details of the PICC (that is: the tag/card)
-
   Serial.print(F("Card UID:"));
 
   dump_byte_array(mfrc522.uid.uidByte, mfrc522.uid.size);
 
   Serial.println();
 
-
+  free(str);
+  http.end();
 
   if(((WiFi.status() != WL_CONNECTED))) WiFi.begin(ssid, pass);
 
-
-
+  delay(200);
 }
 
 
@@ -172,8 +91,6 @@ void loop() {
 void dump_byte_array(byte *buffer, byte bufferSize) {
 
   for (byte i = 0; i < bufferSize; i++) {
-
- 
 
     Serial.print(buffer[i] < 0x10 ? " 0" : " ");
 
@@ -187,7 +104,7 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
 
 char* prepare_POST_str(byte* cardID, byte cardIDSize, const char* chipID){
 
-  char* str = (char*) malloc(45); //12 for ""card_id":"", 8 for cardID and, 14 for ", 'reader_id':", 4 for chipID; 
+  char* str = (char*) malloc(45); //12 for ""card_id":"", 8 for cardID and, 14 for ", 'reader_id':", 4 for chipID;
 
   char* k = "{\"card_id\": \"";  //auxiliary variable;
 
@@ -221,7 +138,6 @@ char* byte_to_string(byte *buffer, byte bufferSize){
 
   byte index = 0;
 
-  
 
   for(byte i = 0; i < bufferSize; i++){
 
@@ -234,7 +150,6 @@ char* byte_to_string(byte *buffer, byte bufferSize){
     else str[index] = 'A' + l - 10;
 
     index++;
-
 
 
     if(r <= 9) str[index] = '0' + r;
@@ -255,4 +170,42 @@ char* byte_to_string(byte *buffer, byte bufferSize){
 
 }
 
+void blink_on_answer(int httpCode){
+    pinMode(LED_PIN, OUTPUT);
+    switch(httpCode){
 
+      case HTTPC_ERROR_CONNECTION_REFUSED: ;
+
+      case HTTPC_ERROR_SEND_HEADER_FAILED: ;
+
+      case HTTPC_ERROR_SEND_PAYLOAD_FAILED: ;
+
+      case HTTPC_ERROR_NOT_CONNECTED: ;
+
+      case HTTPC_ERROR_NO_STREAM: ;
+
+      case HTTPC_ERROR_NO_HTTP_SERVER: ;
+
+      case HTTPC_ERROR_TOO_LESS_RAM: ;
+
+      case HTTPC_ERROR_ENCODING: ;
+
+      case HTTPC_ERROR_STREAM_WRITE: ;
+
+      case HTTPC_ERROR_READ_TIMEOUT: ;
+        blink_n_times(5, 50);
+        break;
+
+      default:
+        blink_n_times(3, 200);
+    }
+}
+
+void blink_n_times(int n, int delay_ms){
+  for(int i = 0; i < n; i++){
+    digitalWrite(LED_PIN, HIGH);
+    delay(delay_ms);
+    digitalWrite(LED_PIN, LOW);
+    delay(delay_ms);
+  }
+}
