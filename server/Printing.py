@@ -101,3 +101,5 @@ def StartPrint (printer='MyPSPrinter',
            ".",
            0
         ))
+        # needs testing:
+        os.remove(filename)
