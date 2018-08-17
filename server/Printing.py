@@ -88,19 +88,22 @@ def StartPrint (printer='MyPSPrinter',
                        win32con.DM_SCALE)
     properties['pDevMode'] =devmode
     win32print.SetPrinter(h_printer, 2, properties, 0)
-    listOfFiles = os.listdir(path)
+    try:
+        listOfFiles = os.listdir(path)
 
-    for file in listOfFiles:
-        filename = path+'\\'+file
-        print(filename)
-        print(win32api.ShellExecute(
-           0,
-           "print",
-           filename,
-           '"%s"' % win32print.GetPrinter(h_printer, 2),
-           ".",
-           0
-        ))
+        for file in listOfFiles:
+            filename = path+'\\'+file
+            print(filename)
+            print(win32api.ShellExecute(
+               0,
+               "print",
+               filename,
+               '"%s"' % win32print.GetPrinter(h_printer, 2),
+               ".",
+               0
+            ))
+    except FileExistsError:
+        print('Directory not created.')
 
 
-StartPrint('Samsung M337x 387x 407x Series', 'D:\Text' )
+StartPrint('Samsung M337x 387x 407x Series', 'D:\Tes' )
