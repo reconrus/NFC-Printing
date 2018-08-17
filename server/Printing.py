@@ -88,8 +88,8 @@ def StartPrint (printer='MyPSPrinter',
                        win32con.DM_SCALE)
     properties['pDevMode'] =devmode
     win32print.SetPrinter(h_printer, 2, properties, 0)
-   
-    try: 
+    
+    try:
         listOfFiles = os.listdir(path)
 
         for file in listOfFiles:
