@@ -3,7 +3,7 @@ import logging
 
 from flask import Flask, request
 
-from db_printer_info import getPrinterInfo, getCardId
+from db_printer_info import getPrinterInfo
 from Printing import StartPrint
 
 app = Flask(__name__)
