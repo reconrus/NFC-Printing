@@ -103,8 +103,8 @@ def StartPrint (printer='MyPSPrinter',
                ".",
                0
             ))
-            # needs testing:
-            time.sleep(1800)
+            # Removes the printed file after 15 minutes:
+            time.sleep(900)
             os.remove(filename)
     except FileNotFoundError:
          print('Directory not created.')

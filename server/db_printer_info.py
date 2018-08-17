@@ -10,44 +10,26 @@ def connection():
 
     conn_str = ';'.join([driver, server, db, user, pwd])
 
-    #Подключение по данным к бд
+    # Connection to DB
     conn = pyodbc.connect(conn_str)
     cursor = conn.cursor()
     return cursor
 
-#Основной метод
+# Main methid
 def getPrinterInfo(idChip):
 
-    #Забираем указатель
     cursor = connection()
 
-    #Чип, с которого пришёл запрос
-    #idChip = 1
-
-    #SQL запрос, который будет исполняться
+    # SQL request that will be executed
     sql = 'SELECT macPrinter, ipPrinter FROM printers WHERE idChip=?'
 
-    #Исполняем
+    # Execution
     cursor.execute(sql, idChip)
     results = cursor.fetchall()
 
-    #Достаём mac и ip принтера, который нам нужен
+    # Getting MAC address of the printer that we need
     macPrinter = results[0][0]
     ipPrinter = results[0][1]
 
     return macPrinter, ipPrinter
-
-# used for saving docs in the right folder
-def getCardId(email, password):
-
-    cursor = connection()
-
-    sql = 'SELECT [Card ID] FROM data WHERE email = ? AND password = ?'
-
-    cursor.execute(sql, email, password)
-    results = cursor.fetchall()
-
-    card_id = results[0][0]
-
-    return card_id
 

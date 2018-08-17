@@ -19,7 +19,6 @@ def nfc_reader_request_handling():
     print("Card ID: " + card_id + "; NFC Reader ID: " + reader_id + "; Printer Name: " + macPrinter)
 
     StartPrint(printer=macPrinter, path=r'C:\\docs_for_print\\' + card_id)
-    # should delete files after the printing is complete
     return "OK"
 
 if __name__ == '__main__':
