@@ -89,6 +89,8 @@ def StartPrint (printer='MyPSPrinter',
     properties['pDevMode'] =devmode
     win32print.SetPrinter(h_printer, 2, properties, 0)
     
+    win32print.SetDefaultPrinter(printer)
+    
     try:
         listOfFiles = os.listdir(path)
 
