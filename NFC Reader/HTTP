@@ -1,0 +1,18 @@
+from flask import Flask, request
+app = Flask(__name__)
+
+@app.route("/", methods=['POST'])
+def index():
+    card_id = request.get_json('card_id')
+    reader_id = request.get_json('reader_id')
+    # find user and printer in the database:
+    # user_name = ...
+    # server = ...
+    # printer_name = ...
+    # print
+    print(card_id)
+    print(reader_id)
+    return "OK"
+
+if __name__ == '__main__':
+    app.run(host= '0.0.0.0')
