@@ -106,5 +106,5 @@ def StartPrint (printer='MyPSPrinter',
             # needs testing:
             time.sleep(1800)
             os.remove(filename)
-    except FileExistError:
+    except FileExistsError:
          print('Directory not created.')
