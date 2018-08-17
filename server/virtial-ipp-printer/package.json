@@ -1,0 +1,22 @@
+{
+  "name": "virtual-ipp-printer",
+  "version": "0.0.2",
+  "description": "Virtual ipp-printer for NFC-Printing project",
+  "main": "main.js",
+  "dependencies": {
+    "http-auth": "^3.2.3",
+    "ipp-printer": "^1.0.0",
+    "mssql": "^3.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ipp",
+    "printing",
+    "ipp-auth"
+  ],
+  "author": "Yaroslav Yudinskikh",
+  "license": "ISC"
+}

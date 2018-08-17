@@ -1,6 +1,6 @@
 import win32print, win32ui, win32gui, win32api
 import win32con, pywintypes
-import os
+import os, time
 
 
 def install_printer (printer_name='MyPSPrinter'):
@@ -88,6 +88,7 @@ def StartPrint (printer='MyPSPrinter',
                        win32con.DM_SCALE)
     properties['pDevMode'] =devmode
     win32print.SetPrinter(h_printer, 2, properties, 0)
+    
     try:
         listOfFiles = os.listdir(path)
 
@@ -102,8 +103,8 @@ def StartPrint (printer='MyPSPrinter',
                ".",
                0
             ))
-    except FileExistsError:
-        print('Directory not created.')
-
-
-StartPrint('Samsung M337x 387x 407x Series', 'D:\Tes' )
+            # Removes the printed file after 15 minutes:
+            time.sleep(900)
+            os.remove(filename)
+    except FileNotFoundError:
+         print('Directory not created.')
