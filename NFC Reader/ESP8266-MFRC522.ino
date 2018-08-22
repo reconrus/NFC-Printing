@@ -90,7 +90,7 @@ void loop() {
 
 void dump_byte_array(byte *buffer, byte bufferSize) {
 
-  for (byte i = 0; i < bufferSize; i++) {
+  for (int i = bufferSize - 1; i >= 0; i--) {
 
     Serial.print(buffer[i] < 0x10 ? " 0" : " ");
 
@@ -139,7 +139,7 @@ char* byte_to_string(byte *buffer, byte bufferSize){
   byte index = 0;
 
 
-  for(byte i = 0; i < bufferSize; i++){
+  for(int i = bufferSize - 1; i >= 0 ; i--){
 
     byte l = buffer[i] >> 4;
 
