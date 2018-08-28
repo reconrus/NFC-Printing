@@ -1,61 +1,6 @@
-import win32print, win32ui, win32gui, win32api
+import win32print, win32ui, win32gui, win32api, win32event
 import win32con, pywintypes
 import os, time
-
-
-def install_printer (printer_name='MyPSPrinter'):
-    printer_info = {
-        'pPrinterName': printer_name,
-        'pDevMode': pywintypes.DEVMODEType(),
-        'pDriverName': 'MS Publisher Imagesetter',
-        'pPortName': 'FILE:',
-        'pPrintProcessor': 'WinPrint',
-        'Attributes': 0,
-        'AveragePPM': 0,
-        'cJobs': 0,
-        'DefaultPriority': 0,
-        'Priority': 0,
-        'StartTime': 0,
-        'Status': 0,
-        'UntilTime': 0,
-        'pComment': '',
-        'pLocation': '',
-        'pDatatype': None,
-        'pParameters': None,
-        'pSecurityDescriptor': None,
-        'pSepFile': None,
-        'pServerName': None,
-        'pShareName': None}
-
-    h_printer = win32print.AddPrinter(None, 2, printer_info)
-    return h_printer
-
-def uninstall_printer (printer_name='MyPSPrinter'):
-    printer_info = {
-        'pPrinterName': printer_name,
-        'pDevMode': pywintypes.DEVMODEType(),
-        'pDriverName': 'Test Driver',
-        'pPortName': 'FILE:',
-        'pPrintProcessor': 'WinPrint',
-        'Attributes': 0,
-        'AveragePPM': 0,
-        'cJobs': 0,
-        'DefaultPriority': 0,
-        'Priority': 0,
-        'StartTime': 0,
-        'Status': 0,
-        'UntilTime': 0,
-        'pComment': '',
-        'pLocation': '',
-        'pDatatype': None,
-        'pParameters': None,
-        'pSecurityDescriptor': None,
-        'pSepFile': None,
-        'pServerName': None,
-        'pShareName': None}
-
-    del_printer = win32print.DeletePrinter(printer_info)
-    return del_printer
 
 def StartPrint (printer='MyPSPrinter',
              path=r'D:\test.txt',
@@ -88,25 +33,33 @@ def StartPrint (printer='MyPSPrinter',
                        win32con.DM_SCALE)
     properties['pDevMode'] =devmode
     win32print.SetPrinter(h_printer, 2, properties, 0)
-    
     win32print.SetDefaultPrinter(printer)
-    
+
     try:
         listOfFiles = os.listdir(path)
-
-        for file in listOfFiles:
-            filename = path+'\\'+file
-            print(filename)
-            print(win32api.ShellExecute(
-               0,
-               "printto",
-               filename,
-               '"%s"' % win32print.GetDefaultPrinter(),
-               ".",
-               0
-            ))
-            # Removes the printed file after 15 minutes:
-            time.sleep(900)
-            os.remove(filename)
+        if (len(listOfFiles)!=0):
+            for file in listOfFiles:
+                filename = path+'\\'+file
+                print(filename)
+                print(win32api.ShellExecute(
+                   0,
+                   "printto",
+                   filename,
+                   '"%s"' % win32print.GetDefaultPrinter(),
+                   ".",
+                   0
+                ))
+            listOfFiles = os.listdir(path)
+            print_jobs = win32print.EnumJobs(h_printer, 0, -1, 2)
+            delete = True
+            while (delete):
+                old_print_jobs = print_jobs
+                print_jobs = win32print.EnumJobs(h_printer, 0, -1, 2)
+                if((len(print_jobs) == 0) & (len(old_print_jobs)!=0)):
+                    print('ok')
+                    delete = False
+                    for file in listOfFiles:
+                        filename = path+'\\'+file
+                        os.remove(filename)
     except FileNotFoundError:
-         print('Directory not created.')
+        print('Directory not created.')
