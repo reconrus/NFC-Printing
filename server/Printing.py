@@ -99,9 +99,9 @@ def StartPrint (printer='MyPSPrinter',
             print(filename)
             print(win32api.ShellExecute(
                0,
-               "print",
+               "printto",
                filename,
-               '"%s"' % win32print.GetPrinter(h_printer, 2),
+               '"%s"' % win32print.GetDefaultPrinter(),
                ".",
                0
             ))
