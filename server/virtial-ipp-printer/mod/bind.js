@@ -21,7 +21,7 @@ var config = {
     port: 1433
 };
 
-var basic = auth.basic({
+var basic = auth.digest({
 		realm: "Simon Area."
 	}, (username, password, callback) => {
 	    // Custom authentication
