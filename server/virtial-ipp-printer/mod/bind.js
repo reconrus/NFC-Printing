@@ -41,16 +41,18 @@ var digest = auth.digest({
     dbConn.connect().then(function () {
 
         var request = new sql.Request(dbConn);
-
+        //Здесь отправляется запрос в бд: мы ищем username (в нашем варианте в бд это 'name_en')
+        //И получаем пароль
         request.query(`select name_en,surname_en,Card_ID from data WHERE name_en = '${username}' `).then(function (recordSet) {
 
-
+            //Сравнивается пароль ('surname_en') с введёным
             if (recordSet.length!=0 && password == recordSet[0].surname_en){
                     authKey = true;
                     userId = recordSet[0].Card_ID;
 
                   }
-            callback(authKey);
+            callback(authKey); //Отправляется true/false - совпадают ли данные
+            //В примере digest callback по-другому используется
 
             dbConn.close();
 
