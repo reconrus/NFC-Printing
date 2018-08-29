@@ -13,6 +13,8 @@ var auth = require('http-auth');
 var sql = require('mssql');
 var userId = -1;
 
+//Config of connection to MSSQL Server
+//It could be moved into some extern file for useability
 var config = {
     server: 'localhost',
     database: 'test_skip_card',
@@ -21,28 +23,31 @@ var config = {
     port: 1433
 };
 
-var basic = auth.digest({
+//Authentication by 'http-auth'
+var digest = auth.digest({
 		realm: "Simon Area."
-	}, (username, password, callback) => {
-	    // Custom authentication
-	    // Use callback(error) if you want to throw async error.
-		//callback(username === "user" && password === "user");
-    //var key = authentication(username, password, config);
+
+    //Danya & Ilia начинать исправлять отсюда
+
+	}, (username, password, callback) => {   //Из примера по http-auth digest здесь должен быть только username и callback
+
+
+    //BEGIN OF WORKING WTH MSSQL
+
     var dbConn = new sql.Connection(config);
 
     var authKey= false;
-    //5.
+
     dbConn.connect().then(function () {
-        //6.
+
         var request = new sql.Request(dbConn);
-        //7.
+
         request.query(`select name_en,surname_en,Card_ID from data WHERE name_en = '${username}' `).then(function (recordSet) {
-            //console.log(recordSet);
+
 
             if (recordSet.length!=0 && password == recordSet[0].surname_en){
                     authKey = true;
                     userId = recordSet[0].Card_ID;
-                    //console.log("password correct");
 
                   }
             callback(authKey);
@@ -50,19 +55,21 @@ var basic = auth.digest({
             dbConn.close();
 
         }).catch(function (err) {
-            //8.
+
             console.log(err);
             dbConn.close();
             return false;
         });
     }).catch(function (err) {
-        //9.
+
         console.log(err);
         return false;
     });
 
+    //END of WORKING WTH MSSQL
 
 	}
+  //И до сюда
 );
 
 
@@ -76,8 +83,8 @@ module.exports = function (printer) {
     server.on('request', onrequest)
     if (server.address()) onlistening()
     else server.on('listening', onlistening)
-  } else {
-    server = printer.server = http.createServer(basic, onrequest)
+  } else {             //We append 'digest' as parameter of createServer() for Authentication
+    server = printer.server = http.createServer(digest, onrequest)
     server.listen(printer.port, onlistening)
   }
 
@@ -204,14 +211,14 @@ function send (printer, req, res, statusCode, _groups) {
 
 ////// HTTP-AUTH Events //////
 
-basic.on('success', (result, req) => {
+digest.on('success', (result, req) => {
 	console.log(`User authenticated: ${result.user}`);
 });
 
-basic.on('fail', (result, req) => {
+digest.on('fail', (result, req) => {
 	console.log(`User authentication failed: ${result.user}`);
 });
 
-basic.on('error', (error, req) => {
+digest.on('error', (error, req) => {
 	console.log(`Authentication error: ${error.code + " - " + error.message}`);
 });
