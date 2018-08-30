@@ -1,3 +1,7 @@
+## Required Libraries 
+https://github.com/miguelbalboa/rfid
+https://github.com/esp8266/Arduino
+
 ## Wiring
 
 |MFRC522|ESP8266 (ESP-12)| NodeMcu v3 Lua |
