@@ -11,7 +11,26 @@ var operations = require('./operations')
 
 var auth = require('http-auth');
 var sql = require('mssql');
+var MSSQLConnector = require( "node-mssql-connector" );
 var userId = -1;
+
+var MSSQLClient = new MSSQLConnector( {
+    settings: {
+        max: 20,
+        min: 0,
+        idleTimeoutMillis: 30000,
+        detailerror: true # To show detail error information
+    },
+    connection: {
+        userName: "user",
+        password: "kQzYxVJMt8l5O8P51r0YdHHc",
+        server: "localhost",
+        options: {
+            database: "test_skip_card"
+        }
+    }
+})
+
 
 //Config of connection to MSSQL Server
 //It could be moved into some extern file for useability
@@ -25,53 +44,37 @@ var config = {
 
 //Authentication by 'http-auth'
 var digest = auth.digest({
-		realm: "Simon Area."
+    realm: "Simon Area."
 
     //Danya & Ilia начинать исправлять отсюда
 
-	}, (username, password, callback) => {   //Из примера по http-auth digest здесь должен быть только username и callback
+  }, (username, callback) => {
+    // Expecting md5(username:realm:password) in callback.
+
+    //MSSQL Connector
+    var query = MSSQLClient.query( "select surname_en, Card_ID from data WHERE name_en = @username ")
+    query.param( "username", "VarChar",  username );
+    query.exec( function( err, res ){
+    if( err ){
+        console.error( err );
+        return
+    }
+
+    callback(md5(username +":" +realm+":"+ res.result[0]["surname_en"]));
 
 
-    //BEGIN OF WORKING WTH MSSQL
 
-    var dbConn = new sql.Connection(config);
+ });
 
-    var authKey= false;
-
-    dbConn.connect().then(function () {
-
+      var dbConn = new sql.Connection(config);
+      //var authKey= false;
+      dbConn.connect().then(function () {
         var request = new sql.Request(dbConn);
-        //Здесь отправляется запрос в бд: мы ищем username (в нашем варианте в бд это 'name_en')
-        //И получаем пароль
-        request.query(`select name_en,surname_en,Card_ID from data WHERE name_en = '${username}' `).then(function (recordSet) {
-
-            //Сравнивается пароль ('surname_en') с введёным
-            if (recordSet.length!=0 && password == recordSet[0].surname_en){
-                    authKey = true;
-                    userId = recordSet[0].Card_ID;
-
-                  }
-            callback(authKey); //Отправляется true/false - совпадают ли данные
-            //В примере digest callback по-другому используется
-
-            dbConn.close();
-
-        }).catch(function (err) {
-
-            console.log(err);
-            dbConn.close();
-            return false;
+        request.query(`select surname_en from data WHERE name_en = username `).then(function (result) {
+          callback(md5(username + realm + result.surname_en));
         });
-    }).catch(function (err) {
+      });
 
-        console.log(err);
-        return false;
-    });
-
-    //END of WORKING WTH MSSQL
-
-	}
-  //И до сюда
 );
 
 
@@ -214,13 +217,17 @@ function send (printer, req, res, statusCode, _groups) {
 ////// HTTP-AUTH Events //////
 
 digest.on('success', (result, req) => {
-	console.log(`User authenticated: ${result.user}`);
+  console.log(`User authenticated: ${result.user}`);
 });
 
 digest.on('fail', (result, req) => {
-	console.log(`User authentication failed: ${result.user}`);
+  console.log(`User authentication failed: ${result.user}`);
 });
 
 digest.on('error', (error, req) => {
-	console.log(`Authentication error: ${error.code + " - " + error.message}`);
+  console.log(`Authentication error: ${error.code + " - " + error.message}`);
 });
+
+MSSQLClient.on( "error", function( error ){
+    console.log("[ERROR] MSSQL Connector");// handle error
+} );
