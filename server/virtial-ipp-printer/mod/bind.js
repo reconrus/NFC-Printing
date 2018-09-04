@@ -66,14 +66,6 @@ var digest = auth.digest({
 
  });
 
-      var dbConn = new sql.Connection(config);
-      //var authKey= false;
-      dbConn.connect().then(function () {
-        var request = new sql.Request(dbConn);
-        request.query(`select surname_en from data WHERE name_en = username `).then(function (result) {
-          callback(md5(username + realm + result.surname_en));
-        });
-      });
 
 );
 
