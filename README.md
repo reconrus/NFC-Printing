@@ -35,8 +35,12 @@ pip install -r requirements.txt
 ```
 * Follow [the guide](https://github.com/reconrus/NFC-Printing/tree/master/server/virtial-ipp-printer) to install nodejs
 * Launch the MS SQL Database if it is not already started
-* Add printers to the server manually and add them to the database (the same for NFC-Readers)
-* Windows firewall should be turned off for ports 3000 (Virtual IPP printer) and 5000 (Listener of NFC-Reader requests)
+* Add printers to the server manually
+* Add printers and NFC-Readers to the database
+* Turn off Windows firewall for ports 3000 (Virtual IPP printer) and 5000 (Listener of NFC-Reader requests)
+* Install Adobe Acrobat Pro and set it as default app for PostScript files
+* You can find information about NFC Reader [here](https://github.com/reconrus/NFC-Printing/tree/master/NFC%20Reader).
+
 ### Running
 You have to start both Virtual IPP printer and Listener of NFC-Reader requests separately. 
 * Instructions to launch Virtual IPP printer were described [here](https://github.com/reconrus/NFC-Printing/tree/master/server/virtial-ipp-printer).
