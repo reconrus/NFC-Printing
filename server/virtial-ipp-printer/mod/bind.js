@@ -83,12 +83,12 @@ var digest = auth.digest({
         //console.log(res);
         userId = res["card_id"];
         password = res["surname_en"];
-        console.log(username+ " : " + userId+" : "+password);
+        //console.log(username+ " : " + userId+" : "+password);
         callback(md5(username +":Simon Area.:"+ res["surname_en"]));
 
     }catch( err ){
 
-      console.log(`Didn't find that username: ${username}`+ err);
+      //console.log(`Didn't find that username: ${username}`+ err);
       callback();
 
     }
