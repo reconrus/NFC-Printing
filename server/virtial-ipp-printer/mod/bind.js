@@ -14,6 +14,7 @@ var auth = require('http-auth');
 var sql = require('mssql');
 var MSSQLConnector = require( "node-mssql-connector" );
 var userId = -1;
+var userName = undefined;
 var bd_users = [];
 
 var MSSQLClient = new MSSQLConnector( {
@@ -82,6 +83,7 @@ var digest = auth.digest({
 
         //console.log(res);
         userId = res["card_id"];
+        userName = username;
         password = res["surname_en"];
         //console.log(username+ " : " + userId+" : "+password);
         callback(md5(username +":Simon Area.:"+ res["surname_en"]));
@@ -169,6 +171,7 @@ module.exports = function (printer) {
   function onlistening () {
     printer.port = server.address().port
     printer.userId = userId;
+    printer.userName = userName;
 
     if (!printer.uri) printer.uri = 'ipp://' + os.hostname() + ':' + printer.port + '/'
 
@@ -199,6 +202,7 @@ module.exports = function (printer) {
 function router (printer, req, res) {
   var body = req._body
   printer.userId = userId;
+  printer.userName = userName;
   debug('IPP/%d.%d operation %d (request #%d)',
     body.version.major,
     body.version.minor,
@@ -227,6 +231,7 @@ function router (printer, req, res) {
 
 function send (printer, req, res, statusCode, _groups) {
   printer.userId = userId;
+  printer.userName = userName;
   if (typeof statusCode === 'object') return send(printer, req, res, C.SUCCESSFUL_OK, statusCode)
   if (statusCode === undefined) statusCode = C.SUCCESSFUL_OK
 
@@ -256,17 +261,17 @@ function send (printer, req, res, statusCode, _groups) {
 ////// HTTP-AUTH Events //////
 
 digest.on('success', (result, req) => {
-  console.log(`User authenticated: ${result.user}`);
+  //console.log(`User authenticated: ${result.user}`);
 });
 
 digest.on('fail', (result, req) => {
-  console.log(`User authentication failed: ${result.user}`);
+  //console.log(`User authentication failed: ${result.user}`);
 });
 
 digest.on('error', (error, req) => {
-  console.log(`Authentication error: ${error.code + " - " + error.message}`);
+  //console.log(`Authentication error: ${error.code + " - " + error.message}`);
 });
 
 MSSQLClient.on( "error", function( error ){
-    console.log("[ERROR] MSSQL Connector");// handle error
+    //console.log("[ERROR] MSSQL Connector");// handle error
 } );

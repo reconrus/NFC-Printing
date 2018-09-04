@@ -32,6 +32,7 @@ function Printer (opts) {
   this.server = opts.server
   this.fallback = opts.fallback
   this.userID = -2;
+  this.userName = undefined;
 
   bind(this)
 }

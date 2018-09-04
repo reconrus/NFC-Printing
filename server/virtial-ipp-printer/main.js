@@ -19,10 +19,10 @@ printer.on('job', function (job) {
   } catch (err) {
     if (err.code !== 'EEXIST') throw err
   }
-  
+
   var filename = 'job-' + job.id + '-' + Date.now() + '.ps' // .ps = PostScript
   var file = fs.createWriteStream(dir+'\\'+filename)
-  console.log('UserID = ', printer.userId)
+  console.log('UserID = ', printer.userId, ' :: username = ', printer.userName)
 
   job.on('end', function () {
     console.log('[job %d] Document saved as %s', job.id, filename)
