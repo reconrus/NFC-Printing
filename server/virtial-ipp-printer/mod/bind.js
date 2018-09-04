@@ -1,5 +1,6 @@
 'use strict'
 
+var md5 = require('md5')
 var util = require('util')
 var os = require('os')
 var http = require('http')
@@ -19,7 +20,7 @@ var MSSQLClient = new MSSQLConnector( {
         max: 20,
         min: 0,
         idleTimeoutMillis: 30000,
-        detailerror: true # To show detail error information
+        detailerror: true
     },
     connection: {
         userName: "user",
@@ -51,23 +52,49 @@ var digest = auth.digest({
   }, (username, callback) => {
     // Expecting md5(username:realm:password) in callback.
 
+    //callback(md5(username+ ":Simon Area.:pass"));
     //MSSQL Connector
     var query = MSSQLClient.query( "select surname_en, Card_ID from data WHERE name_en = @username ")
     query.param( "username", "VarChar",  username );
     query.exec( function( err, res ){
     if( err ){
+        concole.error( " Query ERROR ")
         console.error( err );
         return
     }
 
-    callback(md5(username +":" +realm+":"+ res.result[0]["surname_en"]));
+    //console.log(res);
+
+    //Бля я хуй знает как кетчить это
+    //Тема такая что если юзер неправильно что-то вводит, надо кетчить ошибку, что не находит поле "surname_en"
+    var password = "";
+
+    try{
+        console.log(res);
+        userId = res.result[0]["card_id"];
+        password = res.result[0]["surname_en"];
+        console.log(username+ " : " + userId+" : "+password);
+        callback(md5(username +":Simon Area.:"+ res.result[0]["surname_en"]));
+
+    }catch( err ){
+
+      console.log(`Didn't find that username: ${username}`+ err);
+      callback();
+
+    }
 
 
 
- });
 
 
-);
+    });
+
+    //Не работает
+
+  });
+
+
+
 
 
 var C = ipp.CONSTANTS
