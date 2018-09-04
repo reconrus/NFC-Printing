@@ -68,19 +68,19 @@ var digest = auth.digest({
 
     try{
         var jsonS = bd_users.result;
-        console.log(`jsonS:`);
-        console.log(jsonS);
-        console.log("Write jsons: \n");
+        // console.log(`jsonS:`);
+        // console.log(jsonS);
+        // console.log("Write jsons: \n");
         for(var i in jsonS){
-          console.log(i," : ", jsonS[i]);
+          //console.log(i," : ", jsonS[i]);
           if (jsonS[i]["name_en"] === username){
-            console.log(`Founded`);
+            //console.log(`Founded`);
             res = jsonS[i];
             break;
           }
         }
 
-        console.log(res);
+        //console.log(res);
         userId = res["card_id"];
         password = res["surname_en"];
         console.log(username+ " : " + userId+" : "+password);
