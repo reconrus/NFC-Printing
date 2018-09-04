@@ -14,6 +14,7 @@ var auth = require('http-auth');
 var sql = require('mssql');
 var MSSQLConnector = require( "node-mssql-connector" );
 var userId = -1;
+var bd_users = [];
 
 var MSSQLClient = new MSSQLConnector( {
     settings: {
@@ -54,27 +55,36 @@ var digest = auth.digest({
 
     //callback(md5(username+ ":Simon Area.:pass"));
     //MSSQL Connector
-    var query = MSSQLClient.query( "select surname_en, Card_ID from data WHERE name_en = @username ")
-    query.param( "username", "VarChar",  username );
-    query.exec( function( err, res ){
-    if( err ){
-        concole.error( " Query ERROR ")
-        console.error( err );
-        return
-    }
+
 
     //console.log(res);
 
     //Бля я хуй знает как кетчить это
     //Тема такая что если юзер неправильно что-то вводит, надо кетчить ошибку, что не находит поле "surname_en"
     var password = "";
+    var res ={} ;
+
+
 
     try{
+        var jsonS = bd_users.result;
+        console.log(`jsonS:`);
+        console.log(jsonS);
+        console.log("Write jsons: \n");
+        for(var i in jsonS){
+          console.log(i," : ", jsonS[i]);
+          if (jsonS[i]["name_en"] === username){
+            console.log(`Founded`);
+            res = jsonS[i];
+            break;
+          }
+        }
+
         console.log(res);
-        userId = res.result[0]["card_id"];
-        password = res.result[0]["surname_en"];
+        userId = res["card_id"];
+        password = res["surname_en"];
         console.log(username+ " : " + userId+" : "+password);
-        callback(md5(username +":Simon Area.:"+ res.result[0]["surname_en"]));
+        callback(md5(username +":Simon Area.:"+ res["surname_en"]));
 
     }catch( err ){
 
@@ -83,15 +93,10 @@ var digest = auth.digest({
 
     }
 
-
-
-
-
     });
 
     //Не работает
 
-  });
 
 
 
@@ -170,12 +175,26 @@ module.exports = function (printer) {
     debug('printer "%s" is listening on %s', printer.name, printer.uri)
     printer.start()
 
+    //var query = MSSQLClient.query( "select surname_en, Card_ID from data WHERE name_en = @username ")
+    var query = MSSQLClient.query( "select name_en, surname_en, Card_ID from data")
+    //query.param( "username", "VarChar",  username );
+    query.exec( function( err, res ){
+      if( err ){
+        concole.error( " Query ERROR ")
+        console.error( err );
+        return
+      }else{
+        bd_users = res;
+        //console.log(bd_users);
+      }
+    });
+
     if (printer._zeroconf) {
       debug('advertising printer "%s" on network on port %s', printer.name, printer.port)
       bonjour.publish({ type: 'ipp', port: printer.port, name: printer.name })
     }
   }
-}
+
 
 function router (printer, req, res) {
   var body = req._body
@@ -228,6 +247,7 @@ function send (printer, req, res, statusCode, _groups) {
   })
 
   res.end(buf)
+  }
 }
 
 
