@@ -15,7 +15,7 @@ def StartPrint (printer='MyPSPrinter',
     h_printer = win32print.OpenPrinter(printer, PRINTER_DEFAULTS)
     properties = win32print.GetPrinter(h_printer, 2)
     devmode = properties["pDevMode"]
-    devmode.FormName = 'Letter'  # or 'A4'
+    devmode.FormName = 'A4'  # or 'Letter'
     devmode.PaperSize = paperSize
     devmode.Orientation = orientation
     devmode.PrintQuality = printQuality
@@ -49,16 +49,14 @@ def StartPrint (printer='MyPSPrinter',
                    ".",
                    0
                 ))
-            listOfFiles = os.listdir(path)
-            print_jobs = win32print.EnumJobs(h_printer, 0, -1, 2)
-            delete = True
-            while (delete):
-                old_print_jobs = print_jobs
                 print_jobs = win32print.EnumJobs(h_printer, 0, -1, 2)
-                if((len(print_jobs) == 0) & (len(old_print_jobs)!=0)):
-                    print('ok')
-                    delete = False
-                    for file in listOfFiles:
+                delete = True
+                while (delete):
+                    old_print_jobs = print_jobs
+                    print_jobs = win32print.EnumJobs(h_printer, 0, -1, 2)
+                    if((len(print_jobs) == 0) & (len(old_print_jobs)!=0)):
+                        print('ok')
+                        delete = False
                         filename = path+'\\'+file
                         os.remove(filename)
     except FileNotFoundError:
