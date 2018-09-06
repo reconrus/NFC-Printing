@@ -6,7 +6,8 @@
   "dependencies": {
     "http-auth": "^3.2.3",
     "ipp-printer": "^1.0.0",
-    "mssql": "^3.3.0"
+    "md5": "^2.2.1",
+    "node-mssql-connector": "^1.2.0"
   },
   "devDependencies": {},
   "scripts": {
