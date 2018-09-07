@@ -21,6 +21,6 @@ Ipp server that is showed as ipp printer.
    ```
    3. Server will start at http://localhost:3000
    4. Login: name_en, Password: surname_en (from dbo.data)
-   4. Add new printer into your machine by hands as "HP Color LaserJet CP6015 PS Class Driver"
+   4. Add new printer into your machine by hands as "Microsoft" -> "Microsoft PS Calss Driver"
    5. Use it as a default printer
    6. All documnents that you sent are stored in this folder.
