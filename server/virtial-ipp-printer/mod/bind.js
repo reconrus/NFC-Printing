@@ -11,7 +11,6 @@ var groups = require('./groups')
 var operations = require('./operations')
 
 var auth = require('http-auth');
-var sql = require('mssql');
 var MSSQLConnector = require( "node-mssql-connector" );
 var userId = -1;
 var userName = undefined;
